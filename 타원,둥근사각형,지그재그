@@ -1,0 +1,58 @@
+package com.example.hello;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+
+
+
+public class MainActivity extends AppCompatActivity {
+
+   class myframe extends View
+   {
+       public myframe(Context context)
+       {
+           super(context);
+       }
+       @Override
+       public void onDraw(Canvas canvas)
+       {
+           setBackgroundColor(Color.BLUE);
+           Paint paint=new Paint();
+           paint.setTextSize(20);
+           paint.setStrokeWidth(20);
+           paint.setColor(Color.YELLOW);
+
+           canvas.drawColor(Color.GREEN);
+           canvas.drawOval(new RectF(450,50,750,550),paint);
+           canvas.drawRoundRect(new RectF(30,50,330,550),15,15,paint);
+           canvas.drawArc(new RectF(30,600,330,1100),360,1000,true,paint);
+           float[] ptsd={500,500,1000,1000,1000,1000,500,1000,500,1000,2000,2000};
+           paint.setStrokeWidth(10);
+           canvas.drawLines(ptsd,paint);
+
+       }
+   }
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        myframe my=new myframe(this);
+        setContentView(my);
+
+    }
+
+
+}
