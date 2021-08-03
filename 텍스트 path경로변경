@@ -1,0 +1,55 @@
+package com.example.hello;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+class myframe extends View
+{
+    public myframe(Context context)
+    {
+        super(context);
+    }
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+        Path path=new Path();
+        Paint paint=new Paint();
+
+
+        paint.setStyle(Paint.Style.STROKE);
+
+        path.moveTo(50,50);
+        path.lineTo(300,50);
+        path.cubicTo(0,0,500,2500,1000,0);
+
+        paint.setColor(Color.BLUE);
+        canvas.drawPath(path,paint);
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(200);
+        canvas.drawTextOnPath("This is a test",path,0,0,paint);
+    }
+}
+
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        setContentView(new myframe(this));
+
+    }
+
+
+
+}
