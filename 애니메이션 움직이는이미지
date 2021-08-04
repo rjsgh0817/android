@@ -1,0 +1,74 @@
+package com.example.hello;
+
+import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+
+public class MainActivity extends AppCompatActivity {
+
+    int sum=0;
+    AnimationDrawable animation;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        ImageView image=findViewById(R.id.img);
+        image.setBackgroundResource(R.drawable.drawable);
+
+        animation=(AnimationDrawable)image.getBackground();
+    }
+    public boolean onTouchEvent(MotionEvent event)
+    {
+
+        if(event.getAction()==MotionEvent.ACTION_DOWN)
+        {
+            sum++;
+            if(sum%2==1)
+            {
+                animation.start();
+                return true;
+            }
+            if(sum%2==0)
+            {
+                animation.stop();
+            }
+
+        }
+
+        return super.onTouchEvent(event);
+    }
+
+
+
+}
+
+//==========================================================================
+
+//activity_main.xml 이 아닌 res/drawable에 생성한 xml파일
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+
+    <item
+        android:drawable="@drawable/b1"
+        android:duration="100"/>
+
+    <item
+        android:drawable="@drawable/b2"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/b3"
+        android:duration="100"/>
+
+    <item
+        android:drawable="@drawable/b4"
+        android:duration="200"/>
+
+
+</animation-list>
