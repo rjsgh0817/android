@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:padding="8dp"
+    >
+
+<!--이미지-->
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dp"/>
+
+<!--제목-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:layout_alignTop="@+id/image"
+        android:layout_toRightOf="@id/image"
+        android:textSize="17dp"
+        android:textStyle="bold"/>
+
+<!--평점-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rating"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@id/image"
+        android:layout_below="@id/title"
+        android:textSize="15dp"
+        />
+
+<!--장르-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/genre"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/image"
+        android:layout_below="@id/rating"
+        android:textSize="13dip"
+        android:textColor="#666666"
+        />
+
+<!--출시연도-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/releaseYear"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:textSize="12dip"
+        android:textColor="#888888"
+        />
+
+</RelativeLayout>
+
+//===============================================================
+메인
+
+<!-- Root Layout -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+
+
+    tools:context=".MainActivity"
+    >
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list"
+        />
+
+</RelativeLayout>
+
+
+//===============================================================
+
+package com.example.hello;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+public class MainActivity extends AppCompatActivity {
+
+    ListView list;
+    String[] titles={
+            "a"
+            ,"b","c","d","e","f","g","h","i","j"
+    };
+
+    Integer[] images={
+            R.drawable.a1,
+            R.drawable.a2,
+            R.drawable.a3,
+            R.drawable.a4,
+            R.drawable.a5,
+            R.drawable.a6,
+            R.drawable.a7,
+            R.drawable.a7,
+            R.drawable.a7,
+            R.drawable.a7
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        CustomList adapter=new CustomList(MainActivity.this);
+        list=(ListView)findViewById(R.id.list);
+        list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            public void onItemClick(AdapterView<?> parent, View view,int position,long id)
+            {
+                Toast.makeText(getBaseContext(),titles[+position],Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public class CustomList extends ArrayAdapter<String>{
+        Activity context;
+        public CustomList(Activity context){
+            super(context,R.layout.main1,titles);
+            this.context=context;
+        }
+    public View getView(int position, View view, ViewGroup parent)
+    {
+        LayoutInflater inflater=context.getLayoutInflater();
+        View rowView=inflater.inflate(R.layout.main1,null,true);
+        ImageView imageView=(ImageView)rowView.findViewById(R.id.image);
+
+        TextView title=(TextView)rowView.findViewById(R.id.title);
+        TextView rating=(TextView)rowView.findViewById(R.id.rating);
+        TextView genre=(TextView)rowView.findViewById(R.id.genre);
+        TextView year=(TextView)rowView.findViewById(R.id.releaseYear);
+        title.setText(titles[position]);
+        imageView.setImageResource(images[position]);
+        rating.setText("9.0"+position);
+        genre.setText("drama");
+        year.setText(1930+position+"");
+        return rowView;
+    }
+    }
+
+}
