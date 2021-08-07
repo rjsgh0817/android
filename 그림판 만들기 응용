@@ -369,7 +369,7 @@ public class main2 extends View {
 
         }
     }
-=
+
 
     public boolean onTouchEvent(MotionEvent event)
     {
