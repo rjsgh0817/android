@@ -1,0 +1,32 @@
+package com.example.hello;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+
+public class MainActivity extends ListActivity {
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        String[] s={"apple","banana","candle"};
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,s);
+        setListAdapter(adapter);
+
+
+    }
+
+    public void onListItemClick(ListView l, View v,int id,long ld)
+    {
+        String s=(String)getListAdapter().getItem(id);
+        Toast.makeText(getApplicationContext(),"선택: "+s,Toast.LENGTH_SHORT).show();
+    }
+
+
+}
