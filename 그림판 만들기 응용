@@ -1,0 +1,409 @@
+package com.example.hello;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+
+public class MainActivity extends AppCompatActivity {
+
+    main2 drawView;
+    ImageButton currPaint,b1;
+    Button b2;
+    TextView t;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        drawView=(main2)findViewById(R.id.drawing);
+        LinearLayout paintLayout=(LinearLayout)findViewById(R.id.paint_colors);
+        currPaint=(ImageButton)paintLayout.getChildAt(2);
+        t=findViewById(R.id.t);
+    }
+
+
+
+
+    public void clicked(View view) {
+        if(view!=currPaint)
+        {
+            String color=view.getTag().toString();
+            drawView.setColor(color);
+            currPaint=(ImageButton)view;
+        }
+        if(view.getId()==R.id.t1)
+        {
+            t.setTextColor(Color.BLACK);
+        }
+        if(view.getId()==R.id.    t2 )
+        {
+            t.setTextColor(Color.  RED  );
+        }
+        if(view.getId()==R.id.   t3  )
+        {
+            t.setTextColor(Color.rgb(255,102,102) );
+        }
+        if(view.getId()==R.id.    t4 )
+        {
+            t.setTextColor(Color. rgb(255,255,51) );
+        }
+        if(view.getId()==R.id.    t5 )
+        {
+            t.setTextColor(Color.  rgb(0,255,0)  );
+        }
+        if(view.getId()==R.id.    t6 )
+        {
+            t.setTextColor(Color.   rgb(0,102,153) );
+        }
+        if(view.getId()==R.id.   t7  )
+        {
+            t.setTextColor(Color.  rgb(51,51,255)  );
+        }
+        if(view.getId()==R.id.   t8  )
+        {
+            t.setTextColor(Color. WHITE  );
+
+        }
+
+    }
+    public void onClick(View view)
+    {
+        if(view.getId()==R.id.d1)
+        {
+            drawView.setStroke(4f);
+        }
+
+        if(view.getId()==R.id.d2)
+        {
+            drawView.setStroke(10f);
+        }
+
+        if(view.getId()==R.id.d3)
+        {
+            drawView.setStroke(20f);
+        }
+
+        if(view.getId()==R.id.d4)
+        {
+            drawView.setStroke(30f);
+        }
+
+        if(view.getId()==R.id.d5)
+        {
+            drawView.setStroke(10000000f);
+        }
+
+    }
+}
+
+
+//=============================================================================
+
+<!-- Root Layout -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    android:background="#FFCCCCCC"
+
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#FFFFFFFF"
+            android:id="@+id/t"
+            android:layout_gravity="center"
+            android:text="건호의 그림판"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/d1"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="1"
+            android:layout_margin="8dp"
+            android:onClick="onClick"
+            />
+
+        <Button
+            android:id="@+id/d2"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="2"
+            android:layout_margin="8dp"
+            android:onClick="onClick"
+
+            />
+        <Button
+            android:id="@+id/d3"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="3"
+            android:layout_margin="8dp"
+            android:onClick="onClick"
+
+            />
+        <Button
+            android:id="@+id/d4"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="4"
+            android:layout_margin="8dp"
+            android:onClick="onClick"
+
+            />
+
+        <Button
+            android:id="@+id/d5"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:text="ALL"
+            android:layout_margin="8dp"
+            android:onClick="onClick"
+
+            />
+
+    </LinearLayout>
+    </LinearLayout>
+
+    <com.example.hello.main2
+        android:id="@+id/drawing"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="5dp"
+
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
+        android:background="#FFFFFFFF"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/paint_colors"
+            android:orientation="horizontal"
+            >
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:id="@+id/t1"
+                android:background="#FF000000"
+                android:onClick="clicked"
+                android:tag="#FF000000"
+                />
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:id="@+id/t2"
+
+                android:background="#FFFF0000"
+                android:onClick="clicked"
+                android:tag="#FFFF0000"
+                />
+0
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="#FFFF6600"
+                android:id="@+id/t3"
+
+                android:onClick="clicked"
+                android:tag="#FFFF6600"
+                />
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="#FFFFCC00"
+                android:id="@+id/t4"
+
+                android:onClick="clicked"
+                android:tag="#FFFFCC00"
+                />
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="#FF009900"
+                android:onClick="clicked"
+                android:id="@+id/t5"
+
+                android:tag="#FF009900"
+                />
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="#0000FF"
+                android:id="@+id/t6"
+
+                android:onClick="clicked"
+                android:tag="#0000FF"
+                />
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:background="#6600FF"
+                android:onClick="clicked"
+                android:id="@+id/t7"
+
+                android:tag="#6600FF"
+                />
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="2dp"
+                android:id="@+id/t8"
+                android:src="@drawable/erase"
+                android:onClick="clicked"
+                android:tag="#FFFFFFFF"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+//=================================================================================================
+
+package com.example.hello;
+
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+
+public class main2 extends View {
+
+    Paint paint=new Paint();
+    Path path=new Path();
+    int paintColor=0xFF000000;
+    Paint canvasPaint;
+    Canvas drawCanvas;
+    Bitmap canvasBitmap;
+    int delete=0;
+    Paint paint2;
+
+    public main2(Context context, AttributeSet attrs)
+    {
+        super(context,attrs);
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(10f);
+        paint.setColor(paintColor);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+
+    }
+
+    public void onSizeChanged(int w,int h,int oldw,int oldh)
+    {
+        super.onSizeChanged(w,h,oldw,oldh);
+        canvasBitmap=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+        drawCanvas=new Canvas(canvasBitmap);
+        canvasPaint=new Paint(Paint.DITHER_FLAG);
+    }
+    public void setDelete()
+    {
+        delete=1;
+    }
+
+    public void onDraw(Canvas canvas)
+    {
+
+        canvas.drawBitmap(canvasBitmap,0,0,canvasPaint);
+        canvas.drawPath(path,paint);
+        if(delete==1)
+        {
+
+
+        }
+    }
+=
+
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        float touchX=event.getX();
+        float touchY=event.getY();
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                path.moveTo(touchX,touchY);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                path.lineTo(touchX,touchY);
+                break;
+            case MotionEvent.ACTION_UP:
+                drawCanvas.drawPath(path,paint);
+                path.reset();
+                break;
+            default:
+            return false;
+
+        }
+        invalidate();
+        return true;
+    }
+    public void setColor(String newColor)
+    {
+        invalidate();
+        paintColor= Color.parseColor(newColor);
+        paint.setColor(paintColor);
+    }
+
+    public void setStroke(float f)
+    {
+        invalidate();
+        paint.setStrokeWidth(f);
+    }
+}
