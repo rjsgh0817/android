@@ -1,0 +1,114 @@
+<!-- Root Layout -->
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:id="@+id/GridView01"
+
+    android:numColumns="auto_fit"
+    android:columnWidth="100dp"
+    android:verticalSpacing="100dp"
+    android:horizontalSpacing="100dp"
+    android:gravity="center"
+
+    >
+
+
+</GridView>
+
+
+//=======================================================================
+
+package com.example.hello;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    GridView gridView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        gridView = (GridView)findViewById(R.id.GridView01);
+        gridView.setAdapter(new main2(this));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }}
+    
+    
+    //===================================================================================
+    
+    
+    package com.example.hello;
+
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+
+public class main2 extends BaseAdapter {
+
+
+    Context mContext;
+
+    public main2(Context context) {
+        mContext = context;
+    }
+
+    public int getCount() {
+        return mThumbIds.length;
+
+    }
+
+    public Object getItem(int position) {
+        return null;
+    }
+
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        ImageView imageView;
+        if(convertView==null)
+        {
+            imageView=new ImageView(mContext);
+            imageView.setLayoutParams(new GridView.LayoutParams(300,300));//객체의 높이와 너비설정
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);//이미지가 중심을 향해 크롭됨
+            imageView.setPadding(8,8,8,8);//동서남북 방향에 대해 패딩설정
+        }
+        else
+        {
+            imageView=(ImageView)convertView;
+        }
+        imageView.setImageResource(mThumbIds[position]);//이미지 뷰 설정
+        return imageView;
+    }
+
+    Integer[] mThumbIds=
+            {
+                    R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android,
+                    R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android, R.drawable.android,
+            };
+
+}
+
