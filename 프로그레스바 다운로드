@@ -1,0 +1,83 @@
+package com.example.hello;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    ProgressDialog progressDialog;
+    int s=0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        progressDialog=new ProgressDialog(this);
+    }
+
+    public void onClick(View view) {
+        progressDialog.setMessage("다운로드 중입니다");
+        progressDialog.setProgress(0);
+        progressDialog.setMax(100);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
+
+
+        Thread thread = new Thread() {
+            public void run() {
+                while (s < 100) {
+                    try {
+                        sleep(200);
+                        s += 5;
+                        progressDialog.setProgress(s);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (s >= 100)
+                        finish();
+                }
+
+            }
+        };
+thread.start();
+    }
+}
+
+
+
+//===========================================================================
+
+
+<!-- Root Layout -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="10dip"
+    tools:context=".MainActivity"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다운로드를 시작하려면 아래 버튼을 누르시오."
+        android:gravity="center"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start"
+        android:layout_marginTop="200dp"
+        android:onClick="onClick"
+        />
+
+
+
+
+</RelativeLayout>
