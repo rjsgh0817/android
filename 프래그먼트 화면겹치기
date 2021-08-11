@@ -1,0 +1,154 @@
+<!-- Root Layout -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+    <FrameLayout
+        android:id="@+id/frame_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:text="안녕하세요요요요요요요ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"
+        android:layout_margin="15dp">
+
+    </FrameLayout>
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:onClick="setFrag1"
+        android:text="프래그먼트1 보이기" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:onClick="setFrag2"
+        android:text="프래그먼트2 보이기" />
+
+
+
+
+</FrameLayout>
+
+
+
+
+//=================================================================================
+
+
+
+
+package com.example.hello;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+    }
+
+    public void setFrag1(View v)
+    {
+        FragmentManager manager=getSupportFragmentManager();
+        FragmentTransaction ft=manager.beginTransaction();
+
+        ft.replace(R.id.frame_container,new frag1(),"one");
+        ft.commitAllowingStateLoss();
+        Toast.makeText(getApplicationContext(),"클릭되엇",Toast.LENGTH_SHORT).show();
+    }
+
+    public void setFrag2(View v)
+    {
+        FragmentManager manager=getSupportFragmentManager();
+        FragmentTransaction ft=manager.beginTransaction();
+
+        ft.replace(R.id.frame_container,new frag2(),"two");
+        ft.commitAllowingStateLoss();
+    }
+}
+
+
+
+//=================================================================================
+//이 프래그먼트를 2개 만들면 됩니다!
+
+
+
+package com.example.hello;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+
+public class frag1 extends Fragment {
+
+    public frag1()
+    {
+
+    }
+
+
+    public void onCreate(Bundle saveInstanceState)
+    {
+        super.onCreate(saveInstanceState);
+    }
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
+    {
+        return inflater.inflate(R.layout.fragment_frag1,container,false);
+    }
+
+
+
+}
+
+
+
+
+//=================================================================================
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff0000"
+    tools:context=".frag1"
+    >
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="프래그먼트1=============================================================="
+        android:textColor="#00ffff"
+        android:textSize="10pt"
+        android:textStyle="bold"
+        />
+
+
+
+</FrameLayout>
+
+
+//=================================================================================
