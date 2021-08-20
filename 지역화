@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Localization Example</string>
+    <string name="text">Sightseeing</string>
+</resources>
+
+
+
+
+
+
+/*
+
+
+지역화 하는방법
+string.xml파일에서 오른쪽 마우스 -> 맨아래 open translation editor -> 영어설정
+
+
+
+*/
