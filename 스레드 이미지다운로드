@@ -1,0 +1,153 @@
+<!-- activity_main.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="top|center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="progressbar test"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_url"
+        android:inputType="textUri"
+        android:text="https://www.gstatic.com/webp/gallery3/1.png"
+        tools:context=".MainActivity"
+    />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="download"
+        android:id="@+id/btn_download"
+        tools:context=".MainActivity"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="223dp"
+        android:id="@+id/iv_image"
+        tools:context=".MainActivity"
+        />
+
+</LinearLayout>
+
+//================================================================================
+
+//MainActivity.java
+package com.example.hello;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    ProgressBar mProgress;
+    int mProgressStatus=0;
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button btndownload=findViewById(R.id.btn_download);
+
+        btndownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText eturl=findViewById(R.id.et_url);
+                ImageView iview=findViewById(R.id.iv_image);
+                Thread t=new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            URL url=new URL(eturl.getText().toString());
+                            HttpURLConnection urlConnection=
+                                   (HttpURLConnection) url.openConnection();
+                            urlConnection.connect();
+                            InputStream istream=urlConnection.getInputStream();
+                            Bitmap bitmap= BitmapFactory.decodeStream(istream);
+                            iview.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    iview.setImageBitmap(bitmap);
+                                }
+                            });
+                        }catch(Exception e)
+                        {
+                            Toast.makeText(getBaseContext(),"오류",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                t.start();
+            }
+        });
+    }
+}
+
+
+//=================================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AndroidManifest.xml -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.hello"
+    android:versionCode="1"
+    android:versionName="1.0"
+    >
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+
+        android:theme="@style/Theme.Hello"
+        >
+
+        <activity android:name=".MainActivity">
+            android:label="@string/MainActivity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+
+            </intent-filter>
+
+        </activity>
+        <activity android:name="main3" android:label="main3"></activity>
+
+
+
+
+
+    </application>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+
+</manifest>
