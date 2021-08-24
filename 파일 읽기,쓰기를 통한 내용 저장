@@ -1,0 +1,106 @@
+<!-- activity_main.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="top|center">
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:id="@+id/edit"/>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="읽기"
+            android:id="@+id/read"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="쓰기"
+            android:id="@+id/write"
+            />
+
+
+
+</LinearLayout>
+
+
+//==========================================================================
+
+
+//MainActivity.java
+package com.example.hello;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    String filename="test.txt";
+    EditText edit;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        edit=findViewById(R.id.edit);
+        Button readbutton=findViewById(R.id.read);
+        readbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    FileInputStream fis= null;
+                    fis = openFileInput(filename);
+                    byte[] buffer=new byte[fis.available()];
+                    fis.read(buffer);
+                    edit.setText(new String(buffer)+"할 말은 여기에");
+                    fis.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        Button writebutton=findViewById(R.id.write);
+        writebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    FileOutputStream fos=openFileOutput(filename, Context.MODE_PRIVATE);
+                    fos.write(edit.getText().toString().getBytes());
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+}
+
