@@ -1,0 +1,71 @@
+<!-- activity_main.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="top|center">
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="여기에 이미지 이름을 입력하시오"
+        android:text=""
+        android:id="@+id/edittext"
+        />
+
+
+
+</LinearLayout>
+
+
+//=============================================================================
+
+
+//MainActivity.java
+package com.example.hello;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    public static String prefs_name = "mypref";
+    TextView name;
+    EditText value;
+    String imageName;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        value = findViewById(R.id.edittext);
+
+        SharedPreferences setting=getSharedPreferences(prefs_name,0);
+
+        imageName = setting.getString("imageName", "");
+        value.setText(imageName);
+    }
+
+    public void onStop()
+    {
+        super.onStop();
+        SharedPreferences setting=getSharedPreferences(prefs_name,0);
+
+        SharedPreferences.Editor editor=setting.edit();
+        imageName=value.getText().toString();
+        editor.putString("imageName",imageName);
+        editor.commit();
+    }
+}
+
+
