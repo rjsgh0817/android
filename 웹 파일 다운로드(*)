@@ -1,0 +1,166 @@
+<!-- activity_main.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="top|center">
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/url"
+        android:ems="10">
+        <requestFocus/>
+    </EditText>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/download"
+        android:text="button"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/text"
+        android:text="textview"
+        />
+
+
+</LinearLayout>
+
+
+
+//=================================================================================
+
+import java.net.URL;
+
+
+public class MainActivity extends AppCompatActivity {
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button btndownload=findViewById(R.id.download);
+        View.OnClickListener downloadlistener=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isNetworkAvailable())
+                {
+                    EditText url=findViewById(R.id.url);
+                    DownloadTask downloadTask=new DownloadTask();//     다운로드를 위해 스레드 생성
+                    downloadTask.execute(url.getText().toString());//
+                    Toast.makeText(getBaseContext(),"성공",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(getBaseContext(), "newwork is not available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        btndownload.setOnClickListener(downloadlistener);
+    }
+
+    public boolean isNetworkAvailable()// 네트워크가 사용가능한지를 체크한다.
+    {
+        boolean available=false;
+        ConnectivityManager connMgr=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo= connMgr.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isAvailable())
+            available=true;
+        return available;
+    }
+
+    String downloadUrl(String strUrl)throws IOException{//URL주소를 받아 문자열형태로 반환한다.
+        String s=null;
+        byte[] buffer=new byte[1000];
+        InputStream iStream=null;
+            URL url=new URL(strUrl);
+            HttpURLConnection urlConnection=(HttpURLConnection)url.openConnection();
+
+            urlConnection.connect();
+
+            iStream=urlConnection.getInputStream();
+            iStream.read(buffer);
+            s=new String(buffer);
+
+        return s;
+    }
+
+    class DownloadTask extends AsyncTask<String,Integer,String>{//새로운 스레드 생성 방법 중 하나로 AsyncTask 클래스를 이용하는 것
+        String s=null;
+
+        @Override
+        protected String doInBackground(String... strings) {//새로운 스레드에 의하여 배경에서 실행된다.
+
+            try {
+                s=downloadUrl(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return s;
+
+
+        }
+        public void onPostExecute(String result)//다운끝날 시 실행되는 프로그램으로 다운받은 문자열로 텍스트를 채운다.
+        {
+            EditText tview=findViewById(R.id.text);
+            tview.setText(result);
+            Toast.makeText(getBaseContext(),"successfully",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+}
+
+
+//=================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AndroidManifest.xml -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.hello"
+    android:versionCode="1"
+    android:versionName="1.0"
+    >
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+
+
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+
+        android:theme="@style/Theme.Hello"
+        >
+
+        <activity android:name=".MainActivity">
+            android:label="@string/MainActivity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+
+            </intent-filter>
+
+        </activity>
+        <activity android:name="main3" android:label="main3"></activity>
+
+
+    </application>
+
+</manifest>
+
+//=================================================================================
