@@ -1,0 +1,101 @@
+<!-- activity_main.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="top|center">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="미디어재생"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearlayout"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/start"
+            android:onClick="startResAudio"
+            android:text="오디오시작"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stop"
+            android:onClick="stopResAudio"
+            android:text="오디오정지"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wait"
+            android:onClick="waitResAudio"
+            android:text="일시정지"
+            />
+
+
+    </LinearLayout>
+    
+</LinearLayout>
+
+
+//=============================================================
+
+
+//MainActivity.java
+package com.example.hello;
+
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+public class MainActivity extends AppCompatActivity {
+
+
+    MediaPlayer mp=null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mp= MediaPlayer.create(this,R.raw.pop);
+
+
+    }
+    public void startResAudio(View v)
+    {
+        mp.start();
+
+    }
+
+    public void stopResAudio(View v)// 스탑기능을 사용하기 위해서 oncreate에 있는 mp=mediaplayer.create를 startresaudio클래스에 넣는다.
+    {
+        if(mp!=null)
+        {
+            mp.stop();
+            mp.release();
+        }
+        mp=null;
+    }
+
+    public void waitResAudio(View v)
+    {
+        mp.pause();
+    }
+
+}
