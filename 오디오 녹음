@@ -1,0 +1,303 @@
+<!-- activity_main.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="top|center">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="미디어재생"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearlayout"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/start"
+            android:onClick="startResAudio"
+            android:text="오디오시작"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stop"
+            android:onClick="stopResAudio"
+            android:text="오디오정지"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wait"
+            android:onClick="waitResAudio"
+            android:text="일시정지"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+//=====================================================================================
+
+
+//MainActivity.java
+package com.example.hello;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
+
+import java.io.IOException;
+
+
+public class MainActivity extends AppCompatActivity {
+
+
+    String log_tag="AudioRecordTest";
+    final int request_record_audio_permission=200;
+    String filename=null;
+
+    RecordButton recordButton=null;
+    MediaRecorder recorder=null;
+
+    PlayButton playButton=null;
+    MediaPlayer player=null;
+
+    boolean permissionToRecrodAccepted=false;
+    String[] permissions={Manifest.permission.RECORD_AUDIO};
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch(requestCode)
+        {
+            case request_record_audio_permission:
+                permissionToRecrodAccepted=grantResults[0]== PackageManager.PERMISSION_GRANTED;
+                break;
+        }
+        if(!permissionToRecrodAccepted)finish();
+    }
+
+    public void onRecord(boolean start) {
+        if (start) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+    }
+        public void onPlay(boolean start)
+        {
+            if(start)
+            { startPlaying();}
+            else
+            { stopPlaying();}
+        }
+
+        public void startPlaying()
+        {
+            player=new MediaPlayer();
+            try {
+                player.setDataSource(filename);
+                player.prepare();
+                player.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        public void stopPlaying()
+        {
+            player.release();
+            player=null;
+        }
+        public void startRecording()
+        {
+            recorder=new MediaRecorder();
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            recorder.setOutputFile(filename);
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+
+            try {
+                recorder.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            recorder.start();
+        }
+
+        public void stopRecording()
+        {
+            recorder.stop();
+            recorder.release();
+            recorder=null;
+        }
+
+        class RecordButton extends AppCompatButton
+        {
+            boolean mStartRecording=true;
+
+            OnClickListener clicker=new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onRecord(mStartRecording);
+                    if(mStartRecording)
+                    {
+                        setText("녹음중지");
+                    }
+                    else{
+                        setText("녹음시작");
+                    }
+                    mStartRecording=!mStartRecording;
+                }
+            };
+            public RecordButton(Context ctx)
+            {
+                super(ctx);
+                setText("녹음시작");
+                setOnClickListener(clicker);
+            }
+        }
+        class PlayButton extends AppCompatButton
+        {
+            boolean mStartPlaying=true;
+
+            OnClickListener clicker=new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPlay(mStartPlaying);
+                    if(mStartPlaying)
+                    {
+                        setText("재생중지");
+                    }
+                    else{
+                        setText("재생시작");
+                    }
+                    mStartPlaying=!mStartPlaying;
+                }
+            };
+            public PlayButton(Context ctx)
+            {
+                super(ctx);
+                setText("재생시작");
+                setOnClickListener(clicker);
+            }
+        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        filename=getExternalCacheDir().getAbsolutePath();
+        filename+="/audiorecordtest.3gp";
+
+        ActivityCompat.requestPermissions(this,permissions,request_record_audio_permission);
+
+        LinearLayout ll=new LinearLayout(this);
+        recordButton=new RecordButton(this);
+        ll.addView(recordButton,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT,0));
+
+        playButton=new PlayButton(this);
+        ll.addView(playButton,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT,0));
+
+        setContentView(ll);
+    }
+
+    public void onStop()
+    {
+        super.onStop();
+        if(recorder!=null)
+        {
+            recorder.release();
+            recorder=null;
+
+        }
+        if(player!=null)
+        {
+            player.release();
+            player=null;
+        }
+    }
+
+
+}
+
+
+
+//=====================================================================================
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AndroidManifest.xml -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.hello"
+    android:versionCode="1"
+    android:versionName="1.0"
+    >
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+
+        android:theme="@style/Theme.Hello"
+        >
+
+        <activity android:name=".MainActivity">
+            android:label="@string/MainActivity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+
+            </intent-filter>
+
+        </activity>
+        <activity android:name="main3" android:label="main3"></activity>
+
+
+    </application>
+
+</manifest>
+
+
+//=====================================================================================
