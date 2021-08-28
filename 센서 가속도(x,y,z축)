@@ -1,0 +1,109 @@
+//MainActivity.java
+package com.example.hello;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+class MyView extends View{
+    float x_accel=0;
+    float y_accel=0;
+    float z_accel=0;
+
+    public void setX_accel(float x)
+    {
+        this.x_accel=x;
+    }
+    public void setY_accel(float y)
+    {
+        this.y_accel=y;
+    }
+    public void setZ_accel(float z)
+    {
+        this.z_accel=z;
+    }
+    public MyView(Context context)
+    {
+        super(context);
+    }
+
+    public void onDraw(Canvas canvas)
+    {
+        Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.RED);
+        paint.setTextSize(30);
+
+        paint.setStrokeWidth((float)(Math.abs(z_accel)*3.0));
+        canvas.drawLine(200,200,200,400,paint);
+        canvas.drawText(""+z_accel,200,200,paint);
+
+        paint.setStrokeWidth((float)(Math.abs(x_accel)*3.0));
+        canvas.drawLine(200,400,400,400,paint);
+        canvas.drawText(""+x_accel,400,400,paint);
+
+        paint.setStrokeWidth((float)(Math.abs(y_accel)*3.0));
+        canvas.drawLine(100,250,200,400,paint);
+        canvas.drawText(""+y_accel,100,250,paint);
+
+    }
+}
+
+
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
+
+
+    SensorManager msensormanager;
+    Sensor maccelometer;
+    MyView view;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_main);
+
+        view=new MyView(this);
+        setContentView(view);
+
+        msensormanager= (SensorManager) getSystemService(SENSOR_SERVICE);
+        maccelometer=msensormanager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    }
+
+    public void onResume()
+    {
+        super.onResume();
+        msensormanager.registerListener(this,maccelometer,SensorManager.SENSOR_DELAY_UI);
+    }
+
+    public void onPause()
+    {
+        super.onPause();
+        msensormanager.unregisterListener(this);
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER)
+        {
+            view.setX_accel(event.values[0]);
+            view.setY_accel(event.values[1]);
+            view.setZ_accel(event.values[2]);
+            view.invalidate();
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+}
