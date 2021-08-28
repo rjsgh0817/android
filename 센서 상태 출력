@@ -1,0 +1,69 @@
+<!-- activity_main.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="top|center"
+    tools:context=".MainActivity">
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text"
+        android:text="textview"
+        />
+
+
+
+</ScrollView>
+
+
+//========================================================================
+
+
+//MainActivity.java
+package com.example.hello;
+
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.List;
+
+
+public class MainActivity extends AppCompatActivity {
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        String report="";
+        SensorManager manager=(SensorManager)getSystemService(Context.SENSOR_SERVICE);
+
+        List<Sensor> sensors=manager.getSensorList(Sensor.TYPE_ALL);
+        report+="전체 센서수: "+sensors.size()+"\n";
+        int i=0;
+        for(Sensor s:sensors)
+        {
+            report+=""+i++ +" name"+s.getName()+"\npower: "+s.getPower()+"\nres: "+s.getResolution()+"\nrange: "+s.getMaximumRange()+"\n\n";
+        }
+        TextView text=findViewById(R.id.text);
+        text.setText(report);
+
+
+    }
+
+
+}
