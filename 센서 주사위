@@ -1,0 +1,122 @@
+<!-- activity_main.xml -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageview"
+        android:onClick="handleClick"
+        android:src="@drawable/android"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/number"
+        android:gravity="center"
+        android:textSize="200sp"
+        />
+    
+
+</FrameLayout>
+
+//======================================================
+
+//MainActivity.java
+package com.example.hello;
+
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Random;
+
+
+public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener, SensorEventListener {
+
+
+    SensorManager msensormanager;
+    Sensor maccelerometer;
+    int shake_threshold=3;
+    TextToSpeech mtts;
+    TextView mnumber;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_main);
+
+        mnumber=findViewById(R.id.number);
+        msensormanager= (SensorManager) getSystemService(SENSOR_SERVICE);
+        maccelerometer= msensormanager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mtts=new TextToSpeech(this,this);
+    }
+
+    public void onResume()
+    {
+        super.onResume();
+        msensormanager.registerListener(this,maccelerometer,SensorManager.SENSOR_DELAY_UI);
+    }
+
+
+    public void onPause()
+    {
+        super.onPause();
+        msensormanager.unregisterListener(this);
+    }
+
+    @Override
+    public void onInit(int status) {
+        if(status!=TextToSpeech.ERROR)
+        {
+            mtts.setLanguage(getResources().getConfiguration().locale);
+        }
+    }
+
+
+    public void onDestroy()
+    {
+        if(mtts!=null)
+        {
+            mtts.stop();
+            mtts.shutdown();
+        }
+        super.onDestroy();
+    }
+
+    public void generateRandomNumber()
+    {
+        Random randomGenerator=new Random();
+        int randomNum= randomGenerator.nextInt(6)+1;
+        mnumber.setText(Integer.toString(randomNum));
+        mtts.speak(Integer.toString(randomNum),TextToSpeech.QUEUE_FLUSH,null);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float x=event.values[0];
+        float y=event.values[1];
+        float z=event.values[2];
+
+        float acceleration= (float) (Math.sqrt(x*x+y*y+z*z)-SensorManager.GRAVITY_EARTH);
+        if(acceleration>shake_threshold)
+        {
+            generateRandomNumber();
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+}
+
