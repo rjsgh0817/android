@@ -1,0 +1,149 @@
+package kr.co.company.hello;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    TextView tv1,tv2,tv3;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        tv1=(TextView) findViewById(R.id.view1);
+        tv2=(TextView) findViewById(R.id.view2);
+        tv3=(TextView) findViewById(R.id.view3);
+    }
+
+    public void onClick(View view)
+    {
+
+        tv1.setVisibility(View.INVISIBLE);
+        tv2.setVisibility(View.INVISIBLE);
+        tv3.setVisibility(View.INVISIBLE);
+
+        switch (view.getId()){
+            case R.id.button1:
+                tv1.setVisibility(View.VISIBLE);
+                break;
+            case R.id.button2:
+                tv2.setVisibility(View.VISIBLE);
+                break;
+            case R.id.button3:
+                tv3.setVisibility(View.VISIBLE);
+                break;
+
+        }
+
+    }
+
+
+}
+
+
+
+
+
+
+//=======================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="COLOR 3" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="COLOR 2" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="COLOR 1" />
+    </LinearLayout>
+
+
+
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/view1"
+                android:backgroundTint="#ff0000"
+                android:background="#ff0000"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/view2"
+                android:backgroundTint="#00ff00"
+                android:background="#00ff00"
+                />
+            <TextView
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0000ff"
+                android:backgroundTint="#0000ff" />
+
+        </FrameLayout>
+
+
+
+
+
+
+
+</LinearLayout>
